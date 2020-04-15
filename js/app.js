@@ -8,13 +8,17 @@ var app = new Vue({
         editProduct: false,
         productImage: "",
         errors: [],
+        productId: "0",
+        id: "",
+        arrayIndex: "",
     },
 
     methods: {
         productButtonAdd: function() {
             if (this.productName && this.productPrice) {
+                this.productId = parseInt(this.productId) + 1;
                 this.errors = [];
-                this.productItems.push({name: this.productName,price: this.productPrice,image: this.productImage});
+                this.productItems.push({id: this.productId,name: this.productName,price: this.productPrice,image: this.productImage});
                 this.productPrice = "";
                 this.productName = "";
                 this.productImage = "";
@@ -41,16 +45,17 @@ var app = new Vue({
         },
 
         editButton: function(index) {
+            this.arrayIndex = index;
+            this.id = this.productItems[index]['id'];
             this.productName = this.productItems[index]['name'];
             this.productPrice = this.productItems[index]['price'];
             this.productImage = this.productItems[index]['image'];
-            this.productItems.splice(index,1);
             this.addProduct = false;
             this.editProduct = true;
         },
 
         productButtonEdit: function() {
-            this.productItems.push({name: this.productName, price:this.productPrice, image:this.productImage});
+            Vue.set(this.productItems, this.arrayIndex, {id:this.id, name:this.productName, price:this.productPrice, image:this.productImage});
             this.productName = "";
             this.productPrice = "";
             this.productImage = "";

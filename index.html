@@ -33,6 +33,11 @@
             <div class="col-6">
                 <div class="form-group">
                     <div class="input-group">
+                        <!-- <input type="text" v-model="productId" class="form-control disabled" readonly> -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
                         <input type="text" v-model="productName" placeholder="Product Name" class="form-control" >
                     </div>
                 </div>
@@ -63,6 +68,9 @@
                     <thead>
                         <tr>
                             <th>
+                                Id
+                            </th>
+                            <th>
                                 Name
                             </th>
                             <th>
@@ -79,13 +87,16 @@
                     <tbody>
                         <tr v-for="product,index in productItems">
                             <td>
+                                {{ product.id }}
+                            </td>
+                            <td>
                                 {{ product.name }}
                             </td>
                             <td>
-                                $ {{ product.price }}
+                                ${{ product.price }}
                             </td>
                             <td>
-                                <img v-bind:src="product.image" alt="demo">
+                                <img v-bind:src="product.image" alt="demo" style="width:100px;">
                             </td>
                             <td>
                                 <button class="btn btn-warning" v-on:click="editButton(index)"><i class="fa fa-edit"></i></button>

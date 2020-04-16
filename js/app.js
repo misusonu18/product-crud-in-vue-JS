@@ -10,7 +10,9 @@ var app = new Vue({
         errors: [],
         productId: "0",
         id: "",
-        arrayIndex: "",
+        cartItems: [],
+        cartCheckVariable: "",
+        cartCheckQuantity: "",
     },
 
     methods: {
@@ -61,6 +63,71 @@ var app = new Vue({
             this.productImage = "";
             this.addProduct = true;
             this.editProduct = false;
-        }
-    }
+        },
+
+        addProductCartQuantity: function(index) {
+            let cartProductName = this.cartItems[index]['name'];
+            let cartProductPrice = this.cartItems[index]['price'];
+            let cartProductImage = this.cartItems[index]['image'];
+            let cartProductQuantity = this.cartItems[index]['quantity'] + 1;
+
+            Vue.set(this.cartItems, index, {name:cartProductName, price:cartProductPrice, image:cartProductImage, quantity:cartProductQuantity});
+        },
+
+        subtrctProductCartQuantity: function(index) {
+            let cartProductName = this.cartItems[index]['name'];
+            let cartProductPrice = this.cartItems[index]['price'];
+            let cartProductImage = this.cartItems[index]['image'];
+            let cartProductQuantity = this.cartItems[index]['quantity'] - 1;
+
+            this.cartItems.filter(obj => {
+                if (obj.name === cartProductName) {
+                    this.cartCheckQuantity = obj.quantity;
+                }
+            });
+            if (this.cartCheckQuantity <= 1) {
+                this.cartItems.splice(index,1);
+            }
+            else {
+                Vue.set(this.cartItems, index, {name:cartProductName, price:cartProductPrice, image:cartProductImage, quantity:cartProductQuantity});
+            }
+        },
+
+        deleteProductCart: function(index) {
+            this.cartItems.splice(index,1);
+        },
+
+        addToCartButton: function(index) {
+            let cartProductName = this.productItems[index]['name'];
+            let cartProductPrice = this.productItems[index]['price'];
+            let cartProductImage = this.productItems[index]['image'];
+            let cartProductQuantity = 1;
+
+            this.cartItems.filter(obj => {
+                if (obj.name === cartProductName) {
+                    this.cartCheckVariable = obj.name;
+                }
+            });
+
+            if (this.cartCheckVariable) {
+                for (i=0; i < this.cartItems.length; i++) {
+                  if (this.cartItems[i].name == this.cartCheckVariable) {
+                      var tempCartProductQuantity = this.cartItems[i].quantity + 1;
+                      Vue.set(this.cartItems, i, {name:cartProductName, price:cartProductPrice, image:cartProductImage, quantity:tempCartProductQuantity});
+                  }
+                }
+                this.cartCheckVariable = "";
+            }
+            else {
+                this.cartItems.push(
+                    {
+                        name:cartProductName,
+                        price:cartProductPrice,
+                        image:cartProductImage,
+                        quantity:cartProductQuantity
+                    }
+                )
+            }
+        },
+    },
 });

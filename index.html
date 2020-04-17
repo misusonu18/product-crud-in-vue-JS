@@ -14,10 +14,11 @@
     </style>
 </head>
 <body>
-    <div class="container" id="product">
+    <div class="container-fluid" id="product">
         <div class="row justify-content-center">
             <div>
-                <center><p class="h2">Product CRUD</p></center>
+            <p class="h2">Product CRUD</p>
+            <hr class="bg-info">
             </div>  
         </div>
         <div class="row">
@@ -29,9 +30,10 @@
                 </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-6">
+        <div class="row border border-info border-bottom-0">
+            <div class="col-lg-3 border border-info border-bottom-0">
                 <div class="form-group">
+                    <p class="h2">Add Product</p>
                     <div class="input-group">
                         <input type="text" 
                             v-model="productName" 
@@ -74,37 +76,64 @@
                         <i class="fa fa-cart-arrow-down"></i>
                     </button>
                 </div>
-                
+            </div>
+            <div class="col-lg-5 border border-info border-bottom-0">
+                <p class="h2">Display Record</p>
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Image Path</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="product,index in productItems">
+                                    <td> {{ product.id }} </td>
+                                    <td> {{ product.name }} </td>
+                                    <td> ${{ product.price }} </td>
+                                    <td> <img v-bind:src="product.image" alt="demo" style="width:100px;"> </td>
+                                    <td>
+                                        <button class="btn btn-warning" v-on:click="editButton(index)"><i class="fa fa-edit"></i></button>
+                                        <button class="btn btn-danger" v-on:click="deleteButton(index)"><i class="fa fa-trash"></i></button>
+                                        <button class="btn btn-success" v-on:click="addToCartButton(index)"><i class="fa fa-cart-arrow-down"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 border border-info border-bottom-0">
+                <p class="h2">Add To Cart</p>
+                <div v-if="cartItems.length" v-for="cartItem,index in cartItems">
+                    <p><img v-bind:src="cartItem.image" alt="demo" style="width:100px;"></p>
+                    <div class="d-flex justify-content-between" >
+                        <p>
+                            {{ cartItem.name }} 
+                        </p>
+                        <p>
+                            ${{ cartItem.price }}
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p>
+                            {{ cartItem.quantity }}
+                        </p>
+                        <div>
+                            <button class="btn btn-success" v-on:click="addProductCartQuantity(index)"><i class="fa fa-plus-square"></i></button>
+                            <button class="btn btn-danger" v-on:click="subtrctProductCartQuantity(index)"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-danger" v-on:click="deleteProductCart(index)"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Image Path</th>
-                            <th>action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="product,index in productItems">
-                            <td> {{ product.id }} </td>
-                            <td> {{ product.name }} </td>
-                            <td> ${{ product.price }} </td>
-                            <td> <img v-bind:src="product.image" alt="demo" style="width:100px;"> </td>
-                            <td>
-                                <button class="btn btn-warning" v-on:click="editButton(index)"><i class="fa fa-edit"></i></button>
-                                <button class="btn btn-danger" v-on:click="deleteButton(index)"><i class="fa fa-trash"></i></button>
-                                <button class="btn btn-success" v-on:click="addToCartButton(index)"><i class="fa fa-cart-arrow-down"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        
         <div class="modal fade text-dark" id="addToCartModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -119,7 +148,7 @@
                         <p><img v-bind:src="cartItem.image" alt="demo" style="width:100px;"></p>
                         <div class="d-flex justify-content-between" >
                             <p>
-                                {{ cartItem.name }}
+                                {{ cartItem.name }} 
                             </p>
                             <p>
                                 ${{ cartItem.price }}

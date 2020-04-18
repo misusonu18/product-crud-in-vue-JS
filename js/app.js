@@ -13,6 +13,15 @@ var app = new Vue({
         cartItems: [],
         cartCheckVariable: "",
         cartCheckQuantity: "",
+        subTotal: "",
+        shippingCharge: "",
+        discountAmount: "",
+        total: "",
+        tax: "",
+        payable: "",
+    },
+    created() {
+        this.totalAmountDisplay();
     },
 
     methods: {
@@ -72,9 +81,10 @@ var app = new Vue({
             let cartProductQuantity = this.cartItems[index]['quantity'] + 1;
 
             Vue.set(this.cartItems, index, {name:cartProductName, price:cartProductPrice, image:cartProductImage, quantity:cartProductQuantity});
+            this.totalAmountDisplay();
         },
 
-        subtrctProductCartQuantity: function(index) {
+        subtractProductCartQuantity: function(index) {
             let cartProductName = this.cartItems[index]['name'];
             let cartProductPrice = this.cartItems[index]['price'];
             let cartProductImage = this.cartItems[index]['image'];
@@ -91,12 +101,27 @@ var app = new Vue({
             else {
                 Vue.set(this.cartItems, index, {name:cartProductName, price:cartProductPrice, image:cartProductImage, quantity:cartProductQuantity});
             }
+            this.totalAmountDisplay();
         },
 
         deleteProductCart: function(index) {
             this.cartItems.splice(index,1);
+            this.totalAmountDisplay();
         },
 
+        totalAmountDisplay: function() {
+            if (this.cartItems.length) {
+                this.subTotal = 0;
+                for (let i = 0; i < this.cartItems.length; i++) {
+                    this.subTotal += this.cartItems[i].quantity * this.cartItems[i].price;
+                }
+                this.shippingCharge = this.subTotal < 1000 ? 100 : 0;
+                this.total = parseInt(this.shippingCharge) + parseInt(this.subTotal);
+                this.tax = 18;
+                this.payable = parseInt(this.total) + parseInt(this.tax);
+            }
+            
+        },
         addToCartButton: function(index) {
             let cartProductName = this.productItems[index]['name'];
             let cartProductPrice = this.productItems[index]['price'];
@@ -128,6 +153,7 @@ var app = new Vue({
                     }
                 )
             }
+            this.totalAmountDisplay();
         },
     },
 });
